@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PortSwigger Academy Progress Tracker</title>
+    <title>Red Team Progress Tracker</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap');
+        /* Import Font: Fira Code & Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
         * {
             margin: 0;
@@ -20,60 +21,67 @@
             min-height: 100vh;
             padding: 40px 20px;
         }
+        
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
         }
 
+        /* --- Header Styles (Updated per Ref) --- */
         .header {
             margin-bottom: 50px;
         }
 
         .status-badge {
             display: inline-block;
-            padding: 8px 20px;
+            padding: 6px 16px;
             background: rgba(34, 197, 94, 0.2);
             border: 1px solid #22c55e;
             border-radius: 20px;
             color: #22c55e;
-            font-size: 0.85em;
+            font-size: 0.8em;
             margin-bottom: 20px;
-            font-weight: 600;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+            letter-spacing: 0.5px;
         }
 
         .status-badge::before {
             content: '●';
             margin-right: 8px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            color: #22c55e;
         }
 
         h1 {
             font-size: 3.5em;
-            margin-bottom: 15px;
-            background: linear-gradient(90deg, #22c55e 0%, #10b981 50%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 10px;
             font-weight: 700;
+            letter-spacing: -1px;
+            font-family: 'Fira Code', monospace;
         }
 
-        h1 .academy {
-            color: #e0e0e0;
-            -webkit-text-fill-color: #e0e0e0;
+        /* PortSwigger Green per referensi gambar */
+        h1 .brand-green {
+            color: #22c55e; 
+        }
+
+        h1 .roadmap {
+            color: #ffffff;
         }
 
         .subtitle {
-            color: #9ca3af;
+            color: #8b949e;
             font-size: 1.1em;
             line-height: 1.6;
+            max-width: 700px;
+            font-family: 'Fira Code', monospace;
         }
 
+        /* --- Main Layout --- */
         .main-layout {
             display: grid;
             grid-template-columns: 1fr 380px;
@@ -84,7 +92,7 @@
         .left-panel {
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 25px;
         }
 
         .right-panel {
@@ -93,55 +101,13 @@
             gap: 20px;
         }
 
-        .mastery-card {
-            background: rgba(26, 31, 58, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
-        }
-
-        .mastery-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .mastery-title {
-            color: #9ca3af;
-            font-size: 0.95em;
-            font-weight: 500;
-        }
-
-        .mastery-percent {
-            font-size: 2.5em;
-            font-weight: 700;
-            background: linear-gradient(90deg, #22c55e 0%, #10b981 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .mastery-info {
-            display: flex;
-            justify-content: space-between;
-            color: #6b7280;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-
-        .level-badge {
-            color: #22c55e;
-            font-weight: 600;
-        }
-
+        /* --- Phase Card Styles (User Provided CSS) --- */
         .phase-card {
             background: rgba(26, 31, 58, 0.6);
+            border: 1px solid #30363d;
             border-left: 4px solid;
-            border-radius: 12px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 25px;
             position: relative;
         }
 
@@ -150,44 +116,18 @@
         .phase-card.priority-3 { border-left-color: #eab308; }
         .phase-card.priority-4 { border-left-color: #22c55e; }
 
-        .phase-number {
-            position: absolute;
-            left: -25px;
-            top: 30px;
-            width: 50px;
-            height: 50px;
-            background: rgba(26, 31, 58, 0.95);
-            border: 2px solid;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2em;
-        }
-
-        .priority-1 .phase-number { border-color: #ef4444; color: #ef4444; }
-        .priority-2 .phase-number { border-color: #f97316; color: #f97316; }
-        .priority-3 .phase-number { border-color: #eab308; color: #eab308; }
-        .priority-4 .phase-number { border-color: #22c55e; color: #22c55e; }
-
         .phase-header {
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 10px;
             cursor: pointer;
         }
 
-        .phase-title-group {
-            flex: 1;
-        }
-
         .phase-title {
-            font-size: 1.4em;
-            color: #f3f4f6;
+            font-size: 1.3em;
+            color: #f0f6fc;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -196,7 +136,7 @@
         .collapse-icon {
             font-size: 0.7em;
             transition: transform 0.3s ease;
-            color: #6b7280;
+            color: #8b949e;
         }
 
         .phase-card.collapsed .collapse-icon {
@@ -204,18 +144,21 @@
         }
 
         .phase-subtitle {
-            color: #6b7280;
+            color: #8b949e;
             font-size: 0.9em;
+            margin-left: 24px; /* Align with text not arrow */
+            margin-bottom: 10px;
         }
 
+        /* --- Priority Badges (User Provided CSS) --- */
         .priority-badge {
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.7em;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 10px;
+            font-family: 'Fira Code', monospace;
         }
 
         .priority-1 .priority-badge { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
@@ -225,19 +168,19 @@
 
         .phase-progress {
             text-align: right;
-            color: #22c55e;
+            color: #8b949e;
             font-weight: 600;
-            font-size: 1.3em;
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-family: 'Fira Code', monospace;
         }
 
+        /* --- Topics Container Logic --- */
         .topics-list {
-            margin-top: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-height: 1000px;
+            margin-top: 20px;
+            gap: 15px;
             overflow: hidden;
-            transition: max-height 0.5s ease;
+            transition: max-height 0.5s ease, margin-top 0.5s ease;
         }
 
         .phase-card.collapsed .topics-list {
@@ -245,16 +188,28 @@
             margin-top: 0;
         }
 
+        .topics-list.grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .topics-list.list-layout {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Topic Item Styles (Updated per Ref) --- */
         .topic-item {
             background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 18px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;
-            /* transition: all 0.3s ease; */
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            display: flex; /* Flex row layout */
+            flex-direction: row; 
+            align-items: flex-start;
+            gap: 16px;
+            transition: all 0.2s ease;
+            position: relative;
         }
 
         .topic-item:hover {
@@ -263,25 +218,26 @@
             /* transform: translateX(5px); */
         }
 
-        .topic-item::after {
-            opacity: 1;
-            transform: translateY(0);
+        .topic-item.completed {
+            border-color: rgba(34, 197, 94, 0.4);
+            background: rgba(34, 197, 94, 0.05);
         }
 
-        .topic-item.completed {
-            background: rgba(34, 197, 94, 0.1);
-            border-color: rgba(34, 197, 94, 0.3);
+        /* Checkbox Container (Left Side) */
+        .checkbox-container {
+            flex-shrink: 0;
+            padding-top: 4px; /* Align with title */
         }
 
         .checkbox-wrapper {
             position: relative;
-            width: 24px;
+            width: 24px; /* Slightly bigger per ref image */
             height: 24px;
         }
 
         .custom-checkbox {
-            width: 24px;
-            height: 24px;
+            width: 100%;
+            height: 100%;
             opacity: 0;
             cursor: pointer;
             position: absolute;
@@ -300,233 +256,218 @@
             background: rgba(15, 23, 42, 0.8);
         }
 
+        .topic-item:hover .checkbox-visual {
+            border-color: #8b949e;
+        }
+
         .custom-checkbox:checked + .checkbox-visual {
-            background: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
             border-color: #22c55e;
         }
 
-        .checkbox-visual::after {
-            content: '✓';
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            opacity: 0;
-            transform: scale(0);
-            transition: all 0.2s ease;
-        }
-
-        .custom-checkbox:checked + .checkbox-visual::after {
-            opacity: 1;
-            transform: scale(1);
-        }
-
+        /* Content Container (Right Side) */
         .topic-content {
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
         .topic-name {
-            color: #f3f4f6;
-            font-weight: 600;
-            font-size: 1em;
-            margin-bottom: 8px;
+            color: #f0f6fc;
+            font-weight: 700;
+            font-size: 1.1em;
+            font-family: 'Fira Code', monospace;
+            line-height: 1.2;
         }
 
-        .topic-description {
-            color: #6b7280;
-            font-size: 0.85em;
-            margin-bottom: 8px;
+        .topic-desc {
+            font-size: 0.9em;
+            color: #8b949e;
+            line-height: 1.4;
+            font-family: 'Fira Code', monospace;
         }
 
         .topic-badges {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 12px;
+            margin-top: 8px;
         }
 
+        /* Badge Styles mirip referensi image_773fa2.png */
         .badge {
-            padding: 3px 10px;
+            padding: 4px 8px;
             border-radius: 4px;
-            font-size: 0.7em;
-            font-weight: 600;
+            font-size: 0.75em;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .badge-critical { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
-        .badge-high { background: rgba(249, 115, 22, 0.2); color: #f97316; }
-        .badge-medium { background: rgba(234, 179, 8, 0.2); color: #eab308; }
-        .badge-low { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
-        .badge-owasp { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        /* Style filled badge mirip gambar */
+        .badge-critical { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .badge-high { background: rgba(249, 115, 22, 0.15); color: #f97316; }
+        .badge-medium { background: rgba(234, 179, 8, 0.15); color: #eab308; }
+        .badge-low, .badge-lower { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+        .badge-owasp { background: rgba(56, 189, 248, 0.15); color: #38bdf8; } 
 
         .portswigger-link {
-            color: rgba(59, 130, 246, 0.2);
-            font-size: 0.85em;
-            /* position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0; */
-            /* background: linear-gradient(90deg, #22c55e 0%, #10b981 100%); */
-            /* padding: 10px 18px;
-            color: white;
-            font-size: 0.85em;
-            font-weight: 600;
-            text-decoration: none;
-            display:flex;
-            align-items: left;
-            justify-content: center;
-            gap: 8px;
-            opacity: 0; */
-            /* transform: translateY(100%); */
-            /* transition: all 0.3s ease; */
+            position: absolute;
+            top: 20px;
+            right: 16px;
+            color: #30363d;
+            transition: color 0.2s;
+        }
+        .topic-item:hover .portswigger-link {
+            color: #58a6ff;
         }
 
-        /* .portswigger-link:hover {
-            background: linear-gradient(90deg, #16a34a 0%, #059669 100%);
-        } */
-
+        /* --- Sidebar Cards --- */
         .sidebar-card {
             background: rgba(26, 31, 58, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
         }
 
-        .card-icon {
-            font-size: 1.5em;
+        /* Mastery Card Specifics (Updated per Ref) */
+        .mastery-card {
+            padding: 30px;
+            background: rgba(26, 31, 58, 0.6);
+        }
+        
+        .mastery-title {
+            font-family: 'Fira Code', monospace;
+            color: #8b949e;
+            font-size: 1em;
             margin-bottom: 10px;
         }
 
-        .card-title {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #f3f4f6;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .mastery-percent-large {
+            font-size: 4em;
+            font-weight: 700;
+            color: #22c55e;
+            font-family: 'Fira Code', monospace;
+            line-height: 1;
+            margin-bottom: 20px;
         }
 
-        .target-list {
+        .mastery-footer {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(48, 54, 61, 0.5); /* Subtle separator if needed, or clear */
+            padding-top: 10px;
+        }
+
+        .topic-count {
+            color: #8b949e;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+
+        .level-text {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+            color: #22c55e;
+            font-weight: 600;
+        }
+        
+        .level-label {
+            color: #22c55e;
+            margin-right: 5px;
+        }
+
+        /* --- Target & Tips Card (Kept mostly same, adjusted icons) --- */
+        .card-header {
+            display: flex;
+            align-items: center;
             gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #f0f6fc;
+        }
+        
+        .icon-target { color: #22c55e; width: 24px; height: 24px; }
+        .icon-study { color: #58a6ff; width: 24px; height: 24px; }
+        
+        .target-list, .tips-list {
+            display: flex;
+            background: rgba(26, 31, 58, 0.6);
+            flex-direction: column;
+            gap: 16px;
         }
 
         .target-item {
             display: flex;
-            align-items: start;
+            align-items: flex-start;
             gap: 12px;
-            padding: 12px;
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 8px;
-            border-left: 3px solid #22c55e;
         }
 
-        .check-icon {
+        .target-check-icon {
             color: #22c55e;
-            font-size: 1.2em;
             margin-top: 2px;
+            flex-shrink: 0;
         }
 
-        .target-text {
-            color: #e0e0e0;
-            font-size: 0.9em;
-            line-height: 1.5;
+        .recommendation-separator {
+            border-top: 1px solid #30363d;
+            margin: 20px 0;
         }
 
-        .recommendation-box {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .recommendation-title {
+        .recommendation-label {
             color: #22c55e;
-            font-size: 0.85em;
             font-weight: 700;
+            font-size: 0.8em;
             text-transform: uppercase;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 6px;
         }
 
-        .recommendation-text {
-            color: #d1d5db;
-            font-size: 0.9em;
-            line-height: 1.5;
-        }
-
-        .tips-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .tip-item {
-            padding: 15px;
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 8px;
-            border-left: 3px solid #3b82f6;
+        .tip-box {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
         }
 
         .tip-title {
-            color: #3b82f6;
-            font-size: 0.85em;
-            font-weight: 700;
+            background: rgba(26, 31, 58, 0.6);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75em;
             text-transform: uppercase;
-            margin-bottom: 8px;
             letter-spacing: 1px;
-        }
-
-        .tip-text {
-            color: #d1d5db;
-            font-size: 0.9em;
-            line-height: 1.5;
+            margin-bottom: 8px;
         }
 
         .reset-btn {
-            width: 100%;
-            background: rgba(239, 68, 68, 0.2);
+            background: transparent;
             border: 1px solid #ef4444;
             color: #ef4444;
-            padding: 15px;
-            border-radius: 10px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.95em;
-            font-weight: 600;
             font-family: 'Fira Code', monospace;
-            transition: all 0.3s ease;
+            font-size: 0.9em;
+            transition: all 0.2s;
         }
-
         .reset-btn:hover {
-            background: rgba(239, 68, 68, 0.3);
-            transform: translateY(-2px);
+            background: rgba(239, 68, 68, 0.1);
         }
 
-        @media (max-width: 1200px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .right-panel {
-                order: -1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5em;
-            }
-
-            .phase-number {
-                display: none;
-            }
-
-            .phase-card {
-                padding: 20px;
-            }
+        /* --- Responsive --- */
+        @media (max-width: 1024px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .right-panel { order: -1; }
+            .topics-list.grid-layout { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -534,7 +475,7 @@
     <div class="container">
         <div class="header">
             <div class="status-badge">OWASP TOP 10 (2021) ALIGNED</div>
-            <h1>PortSwigger <span class="academy">Academy</span></h1>
+            <h1><span class="brand-green">Exploit</span> <span class="roadmap">Roadmap</span></h1>
             <p class="subtitle">Master web security vulnerabilities. Track your progress from Apprentice to Expert using this prioritized roadmap.</p>
         </div>
 
@@ -542,148 +483,145 @@
             <div class="left-panel">
                 <!-- Phase 1 -->
                 <div class="phase-card priority-1">
-                    <div class="phase-number">1</div>
                     <div class="phase-header" onclick="togglePhase(this)">
-                        <div class="phase-title-group">
-                            <div class="phase-title">
-                                <span class="collapse-icon">▼</span>
-                                Phase 1: Foundation
-                            </div>
-                            <div class="phase-subtitle">Foundational vulnerabilities. Start here. Master these before moving on.</div>
+                        <div class="phase-title">
+                            <span class="collapse-icon">▼</span>
+                            Phase 1: Foundation
                         </div>
                         <div style="text-align: right;">
-                            <div class="priority-badge">Critical Priority</div>
+                            <span class="priority-badge">Critical</span>
                             <div class="phase-progress" id="phase1-progress">0%</div>
                         </div>
                     </div>
+                    <div class="phase-subtitle">Foundational vulnerabilities. Start here.</div>
                     <div class="topics-list" id="phase1"></div>
                 </div>
 
                 <!-- Phase 2 -->
-                <div class="phase-card priority-2">
-                    <div class="phase-number">2</div>
+                <div class="phase-card priority-2 collapsed">
                     <div class="phase-header" onclick="togglePhase(this)">
-                        <div class="phase-title-group">
-                            <div class="phase-title">
-                                <span class="collapse-icon">▼</span>
-                                Phase 2: Intermediate
-                            </div>
-                            <div class="phase-subtitle">Common attack vectors in modern web applications.</div>
+                        <div class="phase-title">
+                            <span class="collapse-icon">▼</span>
+                            Phase 2: Intermediate
                         </div>
                         <div style="text-align: right;">
-                            <div class="priority-badge">High Priority</div>
+                            <span class="priority-badge">High</span>
                             <div class="phase-progress" id="phase2-progress">0%</div>
                         </div>
                     </div>
+                    <div class="phase-subtitle">Expanding your attack surface knowledge.</div>
                     <div class="topics-list" id="phase2"></div>
                 </div>
 
                 <!-- Phase 3 -->
-                <div class="phase-card priority-3">
-                    <div class="phase-number">3</div>
+                <div class="phase-card priority-3 collapsed">
                     <div class="phase-header" onclick="togglePhase(this)">
-                        <div class="phase-title-group">
-                            <div class="phase-title">
-                                <span class="collapse-icon">▼</span>
-                                Phase 3: Advanced
-                            </div>
-                            <div class="phase-subtitle">Complex vulnerabilities requiring deeper understanding.</div>
+                        <div class="phase-title">
+                            <span class="collapse-icon">▼</span>
+                            Phase 3: Advanced
                         </div>
                         <div style="text-align: right;">
-                            <div class="priority-badge">Medium Priority</div>
+                            <span class="priority-badge">Medium</span>
                             <div class="phase-progress" id="phase3-progress">0%</div>
                         </div>
                     </div>
+                    <div class="phase-subtitle">Complex logic flaws.</div>
                     <div class="topics-list" id="phase3"></div>
                 </div>
 
                 <!-- Phase 4 -->
-                <div class="phase-card priority-4">
-                    <div class="phase-number">4</div>
+                <div class="phase-card priority-4 collapsed">
                     <div class="phase-header" onclick="togglePhase(this)">
-                        <div class="phase-title-group">
-                            <div class="phase-title">
-                                <span class="collapse-icon">▼</span>
-                                Phase 4: Specialized
-                            </div>
-                            <div class="phase-subtitle">Specialized topics and emerging vulnerabilities.</div>
+                        <div class="phase-title">
+                            <span class="collapse-icon">▼</span>
+                            Phase 4: Specialized
                         </div>
                         <div style="text-align: right;">
-                            <div class="priority-badge">Lower Priority</div>
+                            <span class="priority-badge">Specialized</span>
                             <div class="phase-progress" id="phase4-progress">0%</div>
                         </div>
                     </div>
+                    <div class="phase-subtitle">Emerging threats & API testing.</div>
                     <div class="topics-list" id="phase4"></div>
                 </div>
             </div>
 
             <div class="right-panel">
-                <!-- Mastery Card -->
-                <div class="mastery-card">
-                    <div class="mastery-header">
-                        <div class="mastery-title">Total Mastery</div>
-                    </div>
-                    <div class="mastery-percent" id="totalMastery">0%</div>
-                    <div class="mastery-info">
-                        <span id="completedCount">0/30 Topics</span>
-                        <span class="level-badge" id="currentLevel">Level: Script Kiddie</span>
+                <!-- Mastery Card (Refined Layout) -->
+                <div class="sidebar-card mastery-card">
+                    <div class="mastery-title">Total Mastery</div>
+                    <div id="totalMastery" class="mastery-percent-large">0%</div>
+                    
+                    <div class="mastery-footer">
+                        <div id="completedCount" class="topic-count">0/30 Topics</div>
+                        <div class="level-text">
+                            <span class="level-label">Level:</span>
+                            <span id="currentLevelName">Script Kiddie</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Your Target Card -->
                 <div class="sidebar-card">
-                    <div class="card-title">🎯 Your Target</div>
+                    <div class="card-header">
+                        <svg class="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                        <div class="card-title">Your Target</div>
+                    </div>
+                    
                     <div class="target-list">
                         <div class="target-item">
-                            <div class="check-icon">✓</div>
+                            <svg class="target-check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                             <div class="target-text">Handle 80% of real-world vulnerabilities (Priority 1-2).</div>
                         </div>
                         <div class="target-item">
-                            <div class="check-icon">✓</div>
+                            <svg class="target-check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                             <div class="target-text">Qualify for Bug Bounty Programs.</div>
                         </div>
                         <div class="target-item">
-                            <div class="check-icon">✓</div>
+                            <svg class="target-check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                             <div class="target-text">Ready for certification (BSCP, eWPT).</div>
                         </div>
                     </div>
-                    <div class="recommendation-box">
-                        <div class="recommendation-title">Recommendation:</div>
-                        <div class="recommendation-text">Focus strictly on Priority 1 first. Don't skip labs!</div>
-                    </div>
+
+                    <div class="recommendation-separator"></div>
+                    <div class="recommendation-label">Recommendation:</div>
+                    <div style="color: #f0f6fc; font-size: 0.95em;">Focus strictly on Priority 1 first. Don't skip labs!</div>
                 </div>
 
                 <!-- Study Tips Card -->
                 <div class="sidebar-card">
-                    <div class="card-title">🎓 Study Tips</div>
+                    <div class="card-header">
+                        <svg class="icon-study" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                        <div class="card-title">Study Tips</div>
+                    </div>
                     <div class="tips-list">
-                        <div class="tip-item">
-                            <div class="tip-title">Practice is Key</div>
-                            <div class="tip-text">Don't just read. Solve all labs: Apprentice → Practitioner → Expert.</div>
+                        <div class="tip-box">
+                            <div class="tip-title">PRACTICE IS KEY</div>
+                            <div>Don't just read. Solve all labs: Apprentice → Practitioner → Expert.</div>
                         </div>
-                        <div class="tip-item">
-                            <div class="tip-title">Take Notes</div>
-                            <div class="tip-text">Document payloads, techniques, and bypass methods for each vulnerability.</div>
+                        <div class="tip-box">
+                            <div class="tip-title">DOCUMENTATION</div>
+                            <div>Create your own cheatsheets for every vulnerability you learn.</div>
                         </div>
-                        <div class="tip-item">
-                            <div class="tip-title">Join Community</div>
-                            <div class="tip-text">Engage with Discord/Forums for discussions and help.</div>
+                        <div class="tip-box">
+                            <div class="tip-title">COMMUNITY</div>
+                            <div>Join the PortSwigger Discord when you get stuck.</div>
                         </div>
                     </div>
                 </div>
 
-                <button class="reset-btn" onclick="resetProgress()">🔄 Reset All Progress</button>
+                <!-- <button class="reset-btn" onclick="resetProgress()">Reset Progress</button> -->
             </div>
         </div>
     </div>
 
     <script>
         const topics = {
-               phase1: [
-                { name: "SQL Injection", desc: "Paling berbahaya & umum. Mulai dari sini!", owasp: "A03:2021", level: "critical", url: "https://portswigger.net/web-security/sql-injection" },
-                { name: "Cross-site Scripting (XSS)", desc: "Sangat umum di web apps.", owasp: "A03:2021", level: "critical", url: "https://portswigger.net/web-security/cross-site-scripting" },
-                { name: "Authentication", desc: "Broken auth sangat kritis.", owasp: "A07:2021", level: "critical", url: "https://portswigger.net/web-security/authentication" },
-                { name: "Access Control Vulnerabilities", desc: "Peringkat #1 di OWASP 2021!", owasp: "A01:2021", level: "critical", url: "https://portswigger.net/web-security/access-control" }
+             phase1: [
+                { name: "SQL Injection", desc: "Most dangerous & general. Start from this!", owasp: "A03:2021", level: "critical", url: "https://portswigger.net/web-security/sql-injection" },
+                { name: "Cross-site Scripting (XSS)", desc: "General in web apps.", owasp: "A03:2021", level: "critical", url: "https://portswigger.net/web-security/cross-site-scripting" },
+                { name: "Authentication", desc: "Critical broken auth.", owasp: "A07:2021", level: "critical", url: "https://portswigger.net/web-security/authentication" },
+                { name: "Access Control Vulnerabilities", desc: "Ranking #1 in OWASP 2021!", owasp: "A01:2021", level: "critical", url: "https://portswigger.net/web-security/access-control" }
             ],
             phase2: [
                 { name: "CSRF", desc: "Cross-site request forgery attacks.", owasp: "A01:2021", level: "high", url: "https://portswigger.net/web-security/csrf" },
@@ -719,34 +657,50 @@
             ]
         };
 
+        const totalTopicCount = Object.keys(topics).reduce((sum, k) => sum + topics[k].length, 0);
+
         function initializeTopics() {
             Object.keys(topics).forEach(phase => {
                 const container = document.getElementById(phase);
-                topics[phase].forEach((topic, index) => {
+                const phaseData = topics[phase];
+                
+                if (phaseData.length > 6) {
+                    container.classList.add('grid-layout');
+                } else {
+                    container.classList.add('list-layout');
+                }
+
+                container.innerHTML = ''; 
+
+                phaseData.forEach((topic, index) => {
                     const topicId = `${phase}_${index}`;
                     const isCompleted = localStorage.getItem(topicId) === 'true';
                     
                     const item = document.createElement('div');
                     item.className = `topic-item ${isCompleted ? 'completed' : ''}`;
                     item.innerHTML = `
-                        <div class="checkbox-wrapper">
-                            <input type="checkbox" class="custom-checkbox" 
-                                   id="${topicId}" 
-                                   ${isCompleted ? 'checked' : ''}
-                                   onchange="toggleTopic('${topicId}', this)">
-                            <div class="checkbox-visual"></div>
+                        <div class="checkbox-container">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="custom-checkbox" 
+                                       id="${topicId}" 
+                                       ${isCompleted ? 'checked' : ''}
+                                       onchange="toggleTopic('${topicId}', this)">
+                                <div class="checkbox-visual">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="display: ${isCompleted ? 'block' : 'none'}"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                </div>
+                            </div>
                         </div>
                         <div class="topic-content">
                             <div class="topic-name">${topic.name}</div>
-                            <div class="topic-description">${topic.desc}</div>
+                            <div class="topic-desc">${topic.desc}</div>
                             <div class="topic-badges">
                                 <span class="badge badge-${topic.level}">${topic.level}</span>
                                 <span class="badge badge-owasp">${topic.owasp}</span>
                             </div>
-                            <div class="portswigger-link">
-                                <a href="${topic.url}" target="_blank" onclick="event.stopPropagation()">Read on PortSwigger</a>
-                            </div>
                         </div>
+                        <a href="${topic.url}" target="_blank" class="portswigger-link">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        </a>
                     `;
                     container.appendChild(item);
                 });
@@ -757,59 +711,60 @@
         function toggleTopic(topicId, checkbox) {
             localStorage.setItem(topicId, checkbox.checked);
             const item = checkbox.closest('.topic-item');
+            const checkIcon = item.querySelector('.checkbox-visual svg');
+            
             if (checkbox.checked) {
                 item.classList.add('completed');
+                checkIcon.style.display = 'block';
             } else {
                 item.classList.remove('completed');
+                checkIcon.style.display = 'none';
             }
             updateStats();
         }
 
         function updateStats() {
             let totalCompleted = 0;
-            let totalTopics = 0;
             
             Object.keys(topics).forEach(phase => {
                 let phaseCompleted = 0;
                 topics[phase].forEach((_, index) => {
-                    totalTopics++;
-                    const topicId = `${phase}_${index}`;
-                    if (localStorage.getItem(topicId) === 'true') {
+                    if (localStorage.getItem(`${phase}_${index}`) === 'true') {
                         totalCompleted++;
                         phaseCompleted++;
                     }
                 });
                 
-                const phasePercent = Math.round((phaseCompleted / topics[phase].length) * 100);
+                const percent = Math.round((phaseCompleted / topics[phase].length) * 100);
                 const progressEl = document.getElementById(`${phase}-progress`);
-                if (progressEl) progressEl.textContent = phasePercent + '%';
+                if(progressEl) progressEl.textContent = percent + '%';
             });
 
-            const percentage = Math.round((totalCompleted / totalTopics) * 100);
+            const totalPercent = Math.round((totalCompleted / totalTopicCount) * 100);
             
-            document.getElementById('totalMastery').textContent = percentage + '%';
-            document.getElementById('completedCount').textContent = `${totalCompleted}/${totalTopics} Topics`;
-            
-            // Update level
-            let level = 'Script Kiddie';
-            if (percentage >= 80) level = 'Elite Hacker';
-            else if (percentage >= 60) level = 'Expert';
-            else if (percentage >= 40) level = 'Practitioner';
-            else if (percentage >= 20) level = 'Apprentice';
-            
-            document.getElementById('currentLevel').textContent = `Level: ${level}`;
-        }
+            const totalMasteryEl = document.getElementById('totalMastery');
+            if(totalMasteryEl) totalMasteryEl.textContent = totalPercent + '%';
 
-        function resetProgress() {
-            if (confirm('Yakin ingin reset semua progress? Data tidak bisa dikembalikan!')) {
-                localStorage.clear();
-                location.reload();
-            }
+            const completedCountEl = document.getElementById('completedCount');
+            if(completedCountEl) completedCountEl.textContent = `${totalCompleted}/${totalTopicCount} Topics`;
+
+            let level = 'Script Kiddie';
+            if (totalPercent >= 80) level = 'Elite Hacker';
+            else if (totalPercent >= 60) level = 'Expert';
+            else if (totalPercent >= 40) level = 'Practitioner';
+            else if (totalPercent >= 20) level = 'Apprentice';
+            
+            const currentLevelName = document.getElementById('currentLevelName');
+            if(currentLevelName) currentLevelName.textContent = level;
         }
 
         function togglePhase(header) {
-            const phase = header.closest('.phase-card');
-            phase.classList.toggle('collapsed');
+            header.closest('.phase-card').classList.toggle('collapsed');
+        }
+
+        function resetProgress() {
+            localStorage.clear();
+            location.reload();
         }
 
         initializeTopics();
