@@ -215,6 +215,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            margin-bottom: 10px;
         }
 
         .priority-1 .priority-badge { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
@@ -253,13 +254,18 @@
             align-items: center;
             gap: 15px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            /* transition: all 0.3s ease; */
         }
 
         .topic-item:hover {
             background: rgba(15, 23, 42, 0.8);
             border-color: rgba(34, 197, 94, 0.3);
-            transform: translateX(5px);
+            /* transform: translateX(5px); */
+        }
+
+        .topic-item::after {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .topic-item.completed {
@@ -335,6 +341,7 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            margin-bottom: 12px;
         }
 
         .badge {
@@ -350,6 +357,32 @@
         .badge-medium { background: rgba(234, 179, 8, 0.2); color: #eab308; }
         .badge-low { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
         .badge-owasp { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+
+        .portswigger-link {
+            color: rgba(59, 130, 246, 0.2);
+            font-size: 0.85em;
+            /* position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0; */
+            /* background: linear-gradient(90deg, #22c55e 0%, #10b981 100%); */
+            /* padding: 10px 18px;
+            color: white;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-decoration: none;
+            display:flex;
+            align-items: left;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0; */
+            /* transform: translateY(100%); */
+            /* transition: all 0.3s ease; */
+        }
+
+        /* .portswigger-link:hover {
+            background: linear-gradient(90deg, #16a34a 0%, #059669 100%);
+        } */
 
         .sidebar-card {
             background: rgba(26, 31, 58, 0.6);
@@ -646,43 +679,43 @@
 
     <script>
         const topics = {
-            phase1: [
-                { name: "SQL Injection", desc: "Paling berbahaya & umum. Mulai dari sini!", owasp: "A03:2021", level: "critical" },
-                { name: "Cross-site Scripting (XSS)", desc: "Sangat umum di web apps.", owasp: "A03:2021", level: "critical" },
-                { name: "Authentication", desc: "Broken auth sangat kritis.", owasp: "A07:2021", level: "critical" },
-                { name: "Access Control Vulnerabilities", desc: "Peringkat #1 di OWASP 2021!", owasp: "A01:2021", level: "critical" }
+               phase1: [
+                { name: "SQL Injection", desc: "Paling berbahaya & umum. Mulai dari sini!", owasp: "A03:2021", level: "critical", url: "https://portswigger.net/web-security/sql-injection" },
+                { name: "Cross-site Scripting (XSS)", desc: "Sangat umum di web apps.", owasp: "A03:2021", level: "critical", url: "https://portswigger.net/web-security/cross-site-scripting" },
+                { name: "Authentication", desc: "Broken auth sangat kritis.", owasp: "A07:2021", level: "critical", url: "https://portswigger.net/web-security/authentication" },
+                { name: "Access Control Vulnerabilities", desc: "Peringkat #1 di OWASP 2021!", owasp: "A01:2021", level: "critical", url: "https://portswigger.net/web-security/access-control" }
             ],
             phase2: [
-                { name: "CSRF", desc: "Cross-site request forgery attacks.", owasp: "A01:2021", level: "high" },
-                { name: "SSRF", desc: "Server-side request forgery.", owasp: "A10:2021", level: "high" },
-                { name: "XXE Injection", desc: "XML external entity attacks.", owasp: "A03:2021", level: "high" },
-                { name: "OS Command Injection", desc: "Execute system commands.", owasp: "A03:2021", level: "critical" },
-                { name: "Path Traversal", desc: "Access unauthorized files.", owasp: "A01:2021", level: "medium" }
+                { name: "CSRF", desc: "Cross-site request forgery attacks.", owasp: "A01:2021", level: "high", url: "https://portswigger.net/web-security/csrf" },
+                { name: "SSRF", desc: "Server-side request forgery.", owasp: "A10:2021", level: "high", url: "https://portswigger.net/web-security/ssrf" },
+                { name: "XXE Injection", desc: "XML external entity attacks.", owasp: "A03:2021", level: "high", url: "https://portswigger.net/web-security/xxe" },
+                { name: "OS Command Injection", desc: "Execute system commands.", owasp: "A03:2021", level: "critical", url: "https://portswigger.net/web-security/os-command-injection" },
+                { name: "Path Traversal", desc: "Access unauthorized files.", owasp: "A01:2021", level: "medium", url: "https://portswigger.net/web-security/file-path-traversal" }
             ],
             phase3: [
-                { name: "Server-side Template Injection", desc: "Template engine exploitation.", owasp: "A03:2021", level: "high" },
-                { name: "Insecure Deserialization", desc: "Object injection attacks.", owasp: "A08:2021", level: "high" },
-                { name: "Business Logic Vulnerabilities", desc: "Flaws in application logic.", owasp: "A04:2021", level: "medium" },
-                { name: "File Upload Vulnerabilities", desc: "Malicious file uploads.", owasp: "A01:2021", level: "high" },
-                { name: "Information Disclosure", desc: "Sensitive data exposure.", owasp: "A05:2021", level: "medium" },
-                { name: "JWT", desc: "JSON Web Token attacks.", owasp: "A07:2021", level: "high" },
-                { name: "OAuth Authentication", desc: "OAuth implementation flaws.", owasp: "A07:2021", level: "high" },
-                { name: "NoSQL Injection", desc: "NoSQL database attacks.", owasp: "A03:2021", level: "high" }
+                { name: "Server-side Template Injection", desc: "Template engine exploitation.", owasp: "A03:2021", level: "high", url: "https://portswigger.net/web-security/server-side-template-injection" },
+                { name: "Insecure Deserialization", desc: "Object injection attacks.", owasp: "A08:2021", level: "high", url: "https://portswigger.net/web-security/deserialization" },
+                { name: "Business Logic Vulnerabilities", desc: "Flaws in application logic.", owasp: "A04:2021", level: "medium", url: "https://portswigger.net/web-security/logic-flaws" },
+                { name: "File Upload Vulnerabilities", desc: "Malicious file uploads.", owasp: "A01:2021", level: "high", url: "https://portswigger.net/web-security/file-upload" },
+                { name: "Information Disclosure", desc: "Sensitive data exposure.", owasp: "A05:2021", level: "medium", url: "https://portswigger.net/web-security/information-disclosure" },
+                { name: "JWT", desc: "JSON Web Token attacks.", owasp: "A07:2021", level: "high", url: "https://portswigger.net/web-security/jwt" },
+                { name: "OAuth Authentication", desc: "OAuth implementation flaws.", owasp: "A07:2021", level: "high", url: "https://portswigger.net/web-security/oauth" },
+                { name: "NoSQL Injection", desc: "NoSQL database attacks.", owasp: "A03:2021", level: "high", url: "https://portswigger.net/web-security/nosql-injection" }
             ],
             phase4: [
-                { name: "HTTP Request Smuggling", desc: "Advanced HTTP attacks.", owasp: "Related", level: "high" },
-                { name: "HTTP Host Header Attacks", desc: "Host header manipulation.", owasp: "Related", level: "medium" },
-                { name: "Web Cache Poisoning", desc: "Cache manipulation attacks.", owasp: "Related", level: "high" },
-                { name: "Web Cache Deception", desc: "Cache deception techniques.", owasp: "Related", level: "medium" },
-                { name: "Clickjacking", desc: "UI redressing attacks.", owasp: "Related", level: "low" },
-                { name: "DOM-based Vulnerabilities", desc: "Client-side DOM attacks.", owasp: "A03:2021", level: "high" },
-                { name: "WebSockets", desc: "WebSocket security issues.", owasp: "Related", level: "medium" },
-                { name: "CORS", desc: "Cross-origin resource sharing.", owasp: "A05:2021", level: "medium" },
-                { name: "API Testing", desc: "API security testing.", owasp: "Related", level: "high" },
-                { name: "Web LLM Attacks", desc: "AI/LLM vulnerabilities.", owasp: "New", level: "medium" },
-                { name: "GraphQL API Vulnerabilities", desc: "GraphQL security issues.", owasp: "Related", level: "medium" },
-                { name: "Race Conditions", desc: "Timing-based attacks.", owasp: "Related", level: "high" },
-                { name: "Prototype Pollution", desc: "JavaScript prototype attacks.", owasp: "Related", level: "medium" }
+                { name: "HTTP Request Smuggling", desc: "Advanced HTTP attacks.", owasp: "Related", level: "high", url: "https://portswigger.net/web-security/request-smuggling" },
+                { name: "HTTP Host Header Attacks", desc: "Host header manipulation.", owasp: "Related", level: "medium", url: "https://portswigger.net/web-security/host-header" },
+                { name: "Web Cache Poisoning", desc: "Cache manipulation attacks.", owasp: "Related", level: "high", url: "https://portswigger.net/web-security/web-cache-poisoning" },
+                { name: "Web Cache Deception", desc: "Cache deception techniques.", owasp: "Related", level: "medium", url: "https://portswigger.net/web-security/web-cache-deception" },
+                { name: "Clickjacking", desc: "UI redressing attacks.", owasp: "Related", level: "low", url: "https://portswigger.net/web-security/clickjacking" },
+                { name: "DOM-based Vulnerabilities", desc: "Client-side DOM attacks.", owasp: "A03:2021", level: "high", url: "https://portswigger.net/web-security/dom-based" },
+                { name: "WebSockets", desc: "WebSocket security issues.", owasp: "Related", level: "medium", url: "https://portswigger.net/web-security/websockets" },
+                { name: "CORS", desc: "Cross-origin resource sharing.", owasp: "A05:2021", level: "medium", url: "https://portswigger.net/web-security/cors" },
+                { name: "API Testing", desc: "API security testing.", owasp: "Related", level: "high", url: "https://portswigger.net/web-security/api-testing" },
+                { name: "Web LLM Attacks", desc: "AI/LLM vulnerabilities.", owasp: "New", level: "medium", url: "https://portswigger.net/web-security/llm-attacks" },
+                { name: "GraphQL API Vulnerabilities", desc: "GraphQL security issues.", owasp: "Related", level: "medium", url: "https://portswigger.net/web-security/graphql" },
+                { name: "Race Conditions", desc: "Timing-based attacks.", owasp: "Related", level: "high", url: "https://portswigger.net/web-security/race-conditions" },
+                { name: "Prototype Pollution", desc: "JavaScript prototype attacks.", owasp: "Related", level: "medium", url: "https://portswigger.net/web-security/prototype-pollution" }
             ]
         };
 
@@ -709,6 +742,9 @@
                             <div class="topic-badges">
                                 <span class="badge badge-${topic.level}">${topic.level}</span>
                                 <span class="badge badge-owasp">${topic.owasp}</span>
+                            </div>
+                            <div class="portswigger-link">
+                                <a href="${topic.url}" target="_blank" onclick="event.stopPropagation()">Read on PortSwigger</a>
                             </div>
                         </div>
                     `;
