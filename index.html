@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PortSwigger Academy Progress Tracker</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 50px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            border-radius: 20px;
+            color: #22c55e;
+            font-size: 0.85em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .status-badge::before {
+            content: '●';
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #22c55e 0%, #10b981 50%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        h1 .academy {
+            color: #e0e0e0;
+            -webkit-text-fill-color: #e0e0e0;
+        }
+
+        .subtitle {
+            color: #9ca3af;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mastery-card {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .mastery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .mastery-title {
+            color: #9ca3af;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .mastery-percent {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(90deg, #22c55e 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .mastery-info {
+            display: flex;
+            justify-content: space-between;
+            color: #6b7280;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .level-badge {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .phase-card {
+            background: rgba(26, 31, 58, 0.6);
+            border-left: 4px solid;
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .phase-card.priority-1 { border-left-color: #ef4444; }
+        .phase-card.priority-2 { border-left-color: #f97316; }
+        .phase-card.priority-3 { border-left-color: #eab308; }
+        .phase-card.priority-4 { border-left-color: #22c55e; }
+
+        .phase-number {
+            position: absolute;
+            left: -25px;
+            top: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(26, 31, 58, 0.95);
+            border: 2px solid;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .priority-1 .phase-number { border-color: #ef4444; color: #ef4444; }
+        .priority-2 .phase-number { border-color: #f97316; color: #f97316; }
+        .priority-3 .phase-number { border-color: #eab308; color: #eab308; }
+        .priority-4 .phase-number { border-color: #22c55e; color: #22c55e; }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .phase-title-group {
+            flex: 1;
+        }
+
+        .phase-title {
+            font-size: 1.4em;
+            color: #f3f4f6;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .collapse-icon {
+            font-size: 0.7em;
+            transition: transform 0.3s ease;
+            color: #6b7280;
+        }
+
+        .phase-card.collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+
+        .phase-subtitle {
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+
+        .priority-badge {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .priority-1 .priority-badge { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .priority-2 .priority-badge { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+        .priority-3 .priority-badge { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+        .priority-4 .priority-badge { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+
+        .phase-progress {
+            text-align: right;
+            color: #22c55e;
+            font-weight: 600;
+            font-size: 1.3em;
+        }
+
+        .topics-list {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .phase-card.collapsed .topics-list {
+            max-height: 0;
+            margin-top: 0;
+        }
+
+        .topic-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: rgba(34, 197, 94, 0.3);
+            transform: translateX(5px);
+        }
+
+        .topic-item.completed {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .checkbox-wrapper {
+            position: relative;
+            width: 24px;
+            height: 24px;
+        }
+
+        .custom-checkbox {
+            width: 24px;
+            height: 24px;
+            opacity: 0;
+            cursor: pointer;
+            position: absolute;
+            z-index: 2;
+        }
+
+        .checkbox-visual {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #4b5563;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .custom-checkbox:checked + .checkbox-visual {
+            background: #22c55e;
+            border-color: #22c55e;
+        }
+
+        .checkbox-visual::after {
+            content: '✓';
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+        }
+
+        .custom-checkbox:checked + .checkbox-visual::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .topic-content {
+            flex: 1;
+        }
+
+        .topic-name {
+            color: #f3f4f6;
+            font-weight: 600;
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        .topic-description {
+            color: #6b7280;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+        }
+
+        .topic-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-critical { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .badge-high { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+        .badge-medium { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+        .badge-low { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .badge-owasp { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+
+        .sidebar-card {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-icon {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #f3f4f6;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .target-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .target-item {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            border-left: 3px solid #22c55e;
+        }
+
+        .check-icon {
+            color: #22c55e;
+            font-size: 1.2em;
+            margin-top: 2px;
+        }
+
+        .target-text {
+            color: #e0e0e0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .recommendation-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .recommendation-title {
+            color: #22c55e;
+            font-size: 0.85em;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .recommendation-text {
+            color: #d1d5db;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .tips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tip-item {
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .tip-title {
+            color: #3b82f6;
+            font-size: 0.85em;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .tip-text {
+            color: #d1d5db;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .reset-btn {
+            width: 100%;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .right-panel {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .phase-number {
+                display: none;
+            }
+
+            .phase-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="status-badge">OWASP TOP 10 (2021) ALIGNED</div>
+            <h1>PortSwigger <span class="academy">Academy</span></h1>
+            <p class="subtitle">Master web security vulnerabilities. Track your progress from Apprentice to Expert using this prioritized roadmap.</p>
+        </div>
+
+        <div class="main-layout">
+            <div class="left-panel">
+                <!-- Phase 1 -->
+                <div class="phase-card priority-1">
+                    <div class="phase-number">1</div>
+                    <div class="phase-header" onclick="togglePhase(this)">
+                        <div class="phase-title-group">
+                            <div class="phase-title">
+                                <span class="collapse-icon">▼</span>
+                                Phase 1: Foundation
+                            </div>
+                            <div class="phase-subtitle">Foundational vulnerabilities. Start here. Master these before moving on.</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="priority-badge">Critical Priority</div>
+                            <div class="phase-progress" id="phase1-progress">0%</div>
+                        </div>
+                    </div>
+                    <div class="topics-list" id="phase1"></div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="phase-card priority-2">
+                    <div class="phase-number">2</div>
+                    <div class="phase-header" onclick="togglePhase(this)">
+                        <div class="phase-title-group">
+                            <div class="phase-title">
+                                <span class="collapse-icon">▼</span>
+                                Phase 2: Intermediate
+                            </div>
+                            <div class="phase-subtitle">Common attack vectors in modern web applications.</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="priority-badge">High Priority</div>
+                            <div class="phase-progress" id="phase2-progress">0%</div>
+                        </div>
+                    </div>
+                    <div class="topics-list" id="phase2"></div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="phase-card priority-3">
+                    <div class="phase-number">3</div>
+                    <div class="phase-header" onclick="togglePhase(this)">
+                        <div class="phase-title-group">
+                            <div class="phase-title">
+                                <span class="collapse-icon">▼</span>
+                                Phase 3: Advanced
+                            </div>
+                            <div class="phase-subtitle">Complex vulnerabilities requiring deeper understanding.</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="priority-badge">Medium Priority</div>
+                            <div class="phase-progress" id="phase3-progress">0%</div>
+                        </div>
+                    </div>
+                    <div class="topics-list" id="phase3"></div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="phase-card priority-4">
+                    <div class="phase-number">4</div>
+                    <div class="phase-header" onclick="togglePhase(this)">
+                        <div class="phase-title-group">
+                            <div class="phase-title">
+                                <span class="collapse-icon">▼</span>
+                                Phase 4: Specialized
+                            </div>
+                            <div class="phase-subtitle">Specialized topics and emerging vulnerabilities.</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="priority-badge">Lower Priority</div>
+                            <div class="phase-progress" id="phase4-progress">0%</div>
+                        </div>
+                    </div>
+                    <div class="topics-list" id="phase4"></div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <!-- Mastery Card -->
+                <div class="mastery-card">
+                    <div class="mastery-header">
+                        <div class="mastery-title">Total Mastery</div>
+                    </div>
+                    <div class="mastery-percent" id="totalMastery">0%</div>
+                    <div class="mastery-info">
+                        <span id="completedCount">0/30 Topics</span>
+                        <span class="level-badge" id="currentLevel">Level: Script Kiddie</span>
+                    </div>
+                </div>
+
+                <!-- Your Target Card -->
+                <div class="sidebar-card">
+                    <div class="card-title">🎯 Your Target</div>
+                    <div class="target-list">
+                        <div class="target-item">
+                            <div class="check-icon">✓</div>
+                            <div class="target-text">Handle 80% of real-world vulnerabilities (Priority 1-2).</div>
+                        </div>
+                        <div class="target-item">
+                            <div class="check-icon">✓</div>
+                            <div class="target-text">Qualify for Bug Bounty Programs.</div>
+                        </div>
+                        <div class="target-item">
+                            <div class="check-icon">✓</div>
+                            <div class="target-text">Ready for certification (BSCP, eWPT).</div>
+                        </div>
+                    </div>
+                    <div class="recommendation-box">
+                        <div class="recommendation-title">Recommendation:</div>
+                        <div class="recommendation-text">Focus strictly on Priority 1 first. Don't skip labs!</div>
+                    </div>
+                </div>
+
+                <!-- Study Tips Card -->
+                <div class="sidebar-card">
+                    <div class="card-title">🎓 Study Tips</div>
+                    <div class="tips-list">
+                        <div class="tip-item">
+                            <div class="tip-title">Practice is Key</div>
+                            <div class="tip-text">Don't just read. Solve all labs: Apprentice → Practitioner → Expert.</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">Take Notes</div>
+                            <div class="tip-text">Document payloads, techniques, and bypass methods for each vulnerability.</div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-title">Join Community</div>
+                            <div class="tip-text">Engage with Discord/Forums for discussions and help.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="reset-btn" onclick="resetProgress()">🔄 Reset All Progress</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const topics = {
+            phase1: [
+                { name: "SQL Injection", desc: "Paling berbahaya & umum. Mulai dari sini!", owasp: "A03:2021", level: "critical" },
+                { name: "Cross-site Scripting (XSS)", desc: "Sangat umum di web apps.", owasp: "A03:2021", level: "critical" },
+                { name: "Authentication", desc: "Broken auth sangat kritis.", owasp: "A07:2021", level: "critical" },
+                { name: "Access Control Vulnerabilities", desc: "Peringkat #1 di OWASP 2021!", owasp: "A01:2021", level: "critical" }
+            ],
+            phase2: [
+                { name: "CSRF", desc: "Cross-site request forgery attacks.", owasp: "A01:2021", level: "high" },
+                { name: "SSRF", desc: "Server-side request forgery.", owasp: "A10:2021", level: "high" },
+                { name: "XXE Injection", desc: "XML external entity attacks.", owasp: "A03:2021", level: "high" },
+                { name: "OS Command Injection", desc: "Execute system commands.", owasp: "A03:2021", level: "critical" },
+                { name: "Path Traversal", desc: "Access unauthorized files.", owasp: "A01:2021", level: "medium" }
+            ],
+            phase3: [
+                { name: "Server-side Template Injection", desc: "Template engine exploitation.", owasp: "A03:2021", level: "high" },
+                { name: "Insecure Deserialization", desc: "Object injection attacks.", owasp: "A08:2021", level: "high" },
+                { name: "Business Logic Vulnerabilities", desc: "Flaws in application logic.", owasp: "A04:2021", level: "medium" },
+                { name: "File Upload Vulnerabilities", desc: "Malicious file uploads.", owasp: "A01:2021", level: "high" },
+                { name: "Information Disclosure", desc: "Sensitive data exposure.", owasp: "A05:2021", level: "medium" },
+                { name: "JWT", desc: "JSON Web Token attacks.", owasp: "A07:2021", level: "high" },
+                { name: "OAuth Authentication", desc: "OAuth implementation flaws.", owasp: "A07:2021", level: "high" },
+                { name: "NoSQL Injection", desc: "NoSQL database attacks.", owasp: "A03:2021", level: "high" }
+            ],
+            phase4: [
+                { name: "HTTP Request Smuggling", desc: "Advanced HTTP attacks.", owasp: "Related", level: "high" },
+                { name: "HTTP Host Header Attacks", desc: "Host header manipulation.", owasp: "Related", level: "medium" },
+                { name: "Web Cache Poisoning", desc: "Cache manipulation attacks.", owasp: "Related", level: "high" },
+                { name: "Web Cache Deception", desc: "Cache deception techniques.", owasp: "Related", level: "medium" },
+                { name: "Clickjacking", desc: "UI redressing attacks.", owasp: "Related", level: "low" },
+                { name: "DOM-based Vulnerabilities", desc: "Client-side DOM attacks.", owasp: "A03:2021", level: "high" },
+                { name: "WebSockets", desc: "WebSocket security issues.", owasp: "Related", level: "medium" },
+                { name: "CORS", desc: "Cross-origin resource sharing.", owasp: "A05:2021", level: "medium" },
+                { name: "API Testing", desc: "API security testing.", owasp: "Related", level: "high" },
+                { name: "Web LLM Attacks", desc: "AI/LLM vulnerabilities.", owasp: "New", level: "medium" },
+                { name: "GraphQL API Vulnerabilities", desc: "GraphQL security issues.", owasp: "Related", level: "medium" },
+                { name: "Race Conditions", desc: "Timing-based attacks.", owasp: "Related", level: "high" },
+                { name: "Prototype Pollution", desc: "JavaScript prototype attacks.", owasp: "Related", level: "medium" }
+            ]
+        };
+
+        function initializeTopics() {
+            Object.keys(topics).forEach(phase => {
+                const container = document.getElementById(phase);
+                topics[phase].forEach((topic, index) => {
+                    const topicId = `${phase}_${index}`;
+                    const isCompleted = localStorage.getItem(topicId) === 'true';
+                    
+                    const item = document.createElement('div');
+                    item.className = `topic-item ${isCompleted ? 'completed' : ''}`;
+                    item.innerHTML = `
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" class="custom-checkbox" 
+                                   id="${topicId}" 
+                                   ${isCompleted ? 'checked' : ''}
+                                   onchange="toggleTopic('${topicId}', this)">
+                            <div class="checkbox-visual"></div>
+                        </div>
+                        <div class="topic-content">
+                            <div class="topic-name">${topic.name}</div>
+                            <div class="topic-description">${topic.desc}</div>
+                            <div class="topic-badges">
+                                <span class="badge badge-${topic.level}">${topic.level}</span>
+                                <span class="badge badge-owasp">${topic.owasp}</span>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+            });
+            updateStats();
+        }
+
+        function toggleTopic(topicId, checkbox) {
+            localStorage.setItem(topicId, checkbox.checked);
+            const item = checkbox.closest('.topic-item');
+            if (checkbox.checked) {
+                item.classList.add('completed');
+            } else {
+                item.classList.remove('completed');
+            }
+            updateStats();
+        }
+
+        function updateStats() {
+            let totalCompleted = 0;
+            let totalTopics = 0;
+            
+            Object.keys(topics).forEach(phase => {
+                let phaseCompleted = 0;
+                topics[phase].forEach((_, index) => {
+                    totalTopics++;
+                    const topicId = `${phase}_${index}`;
+                    if (localStorage.getItem(topicId) === 'true') {
+                        totalCompleted++;
+                        phaseCompleted++;
+                    }
+                });
+                
+                const phasePercent = Math.round((phaseCompleted / topics[phase].length) * 100);
+                const progressEl = document.getElementById(`${phase}-progress`);
+                if (progressEl) progressEl.textContent = phasePercent + '%';
+            });
+
+            const percentage = Math.round((totalCompleted / totalTopics) * 100);
+            
+            document.getElementById('totalMastery').textContent = percentage + '%';
+            document.getElementById('completedCount').textContent = `${totalCompleted}/${totalTopics} Topics`;
+            
+            // Update level
+            let level = 'Script Kiddie';
+            if (percentage >= 80) level = 'Elite Hacker';
+            else if (percentage >= 60) level = 'Expert';
+            else if (percentage >= 40) level = 'Practitioner';
+            else if (percentage >= 20) level = 'Apprentice';
+            
+            document.getElementById('currentLevel').textContent = `Level: ${level}`;
+        }
+
+        function resetProgress() {
+            if (confirm('Yakin ingin reset semua progress? Data tidak bisa dikembalikan!')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        function togglePhase(header) {
+            const phase = header.closest('.phase-card');
+            phase.classList.toggle('collapsed');
+        }
+
+        initializeTopics();
+    </script>
+</body>
+</html>
